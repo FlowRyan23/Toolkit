@@ -3,6 +3,10 @@ package basic;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseKit {
 
@@ -55,8 +59,8 @@ public class BaseKit {
 		return res;
 	}
 	
-	public static byte[][][] imageToByteArray(Image image) {
-		byte[][][] res = new byte[(int) image.getWidth()][(int) image.getHeight()][4];
+	public static int[][][] imageToByteArray(Image image) {
+		int[][][] res = new int[(int) image.getWidth()][(int) image.getHeight()][4];
 		PixelReader reader = image.getPixelReader();
 		
 		for(int x=0; x<image.getWidth(); x++)
@@ -66,13 +70,33 @@ public class BaseKit {
 		return res;
 	}
 	
-	public static byte[] argbUnpack(int argb) {
+	public static int[] argbUnpack(int argb) {
 		int alpha = (0xff<<24 & argb)>>>24;
 		int red = (0xff<<16 & argb)>>>16;
 		int green = (0xff<<8 & argb)>>>8;
 		int blue = 0xff & argb;
 		
-		return new byte[] {(byte) alpha, (byte) red, (byte) green, (byte) blue};
+		return new int[] {alpha, red, green, blue};
+	}
+	
+	public static int getARGB(Color color) {
+		int alpha = (int) (color.getOpacity() * 255);
+		int red = (int) (color.getRed() * 255);
+		int green = (int) (color.getGreen() * 255);
+		int blue = (int) (color.getBlue() * 255);
+		
+		return (alpha<<24) + (red<<16) + (green<<8) + blue;
+	}
+	
+	public static Color getColor(int argb) {
+		int[] argbList = BaseKit.argbUnpack(argb);
+		return Color.rgb(argbList[1], argbList[2], argbList[3], ((double) argbList[0])/255);
+	}
+	
+	public static <E> List<E> copie(List<E> template) {
+		ArrayList<E> copie = new ArrayList<>(template.size());
+		copie.addAll(template);
+		return (List<E>) copie;
 	}
 	
 }

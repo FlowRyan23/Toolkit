@@ -31,5 +31,4 @@ public class Searchable<T> {
 		return searchHash;
 	}
 	
-	
 }

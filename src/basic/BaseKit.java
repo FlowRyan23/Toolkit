@@ -1,12 +1,14 @@
 package basic;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseKit {
 
@@ -97,6 +99,18 @@ public class BaseKit {
 		ArrayList<E> copie = new ArrayList<>(template.size());
 		copie.addAll(template);
 		return (List<E>) copie;
+	}
+	
+	public static boolean isImageFile(File file) {
+		if(!file.isFile()) {
+			return false;
+		}
+		String name = file.getName();
+		System.out.println(name);
+		String extension = name.substring(name.lastIndexOf("."));
+		if(extension.equals(".jpg") || extension.equals(".png"))
+			return true;
+		return false;
 	}
 	
 }

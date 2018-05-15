@@ -1,7 +1,6 @@
 package basic;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +53,12 @@ public class BaseKit {
 		return val >= min && val <= max;
 	}
 	
+	public static <T extends Comparable<T>> boolean inBounds(T val, T min, T max) {
+		boolean low = val.compareTo(min) == -1;
+		boolean high = val.compareTo(max) == 1;
+		return !low && !high;
+	}
+	
 	public static Image copyImage(Image img) {
 		double width = img.getWidth();
 		double height = img.getHeight();
@@ -93,6 +98,16 @@ public class BaseKit {
 	public static Color getColor(int argb) {
 		int[] argbList = BaseKit.argbUnpack(argb);
 		return Color.rgb(argbList[1], argbList[2], argbList[3], ((double) argbList[0])/255);
+	}
+	
+	public static boolean isWithinToleranz(Color a, Color b, double toleranz) {
+		int[] argbListA = argbUnpack(getARGB(a));
+		int[] argbListB = argbUnpack(getARGB(b));
+		
+		for(int i=0; i<4; i++)
+			if(!(inBounds(argbListA[i]*toleranz, (double) argbListB[i], (double) argbListB[i]) || inBounds(argbListA[i]*(1-toleranz), (double) argbListB[i], (double) argbListB[i])))
+				return false;
+		return true;
 	}
 	
 	public static <E> List<E> copie(List<E> template) {
